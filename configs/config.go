@@ -28,10 +28,10 @@ func InitConfig() Configuration {
 	}
 
 	serverConfig.ServerPort = config.String("server.port", "80")
-	serverConfig.ServerHost = config.String("server.host", "127.0.0.1")
+	serverConfig.ServerHost = config.String("server.host", "localhost")
 	serverConfig.ServerMode = config.String("server.mode", "development")
 	serverConfig.DBPort = uint16(config.Int("db.port", 5432))
-	serverConfig.DBHost = config.String("db.host", "127.0.0.1")
+	serverConfig.DBHost = config.String("db.host", "localhost")
 	serverConfig.DBUser = config.String("db.user", "postgres")
 	serverConfig.DBPassword = config.String("db.password", "mysecretpassword")
 	serverConfig.DBName = config.String("db.name", "postgres")

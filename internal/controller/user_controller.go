@@ -12,6 +12,13 @@ type UserController struct {
 	UserService *service.UserService
 }
 
+// @Summary 獲取用戶信息
+// @Tags User
+// @version 1.0
+// @Param	id	query	int	true	"user search by id"
+// @produce json
+// @Success 200
+// @Router /user [get]
 func (uc *UserController) GetUser(c *gin.Context) {
 
 	id, err := strconv.Atoi(c.Query("id"))
@@ -36,12 +43,19 @@ func (uc *UserController) GetUser(c *gin.Context) {
 	})
 }
 
-func (uc *UserController) CreateUser(c *gin.Context) {
-	type CreateUserRequest struct {
-		Username string `json:"username"`
-		Email    string `json:"email"`
-	}
+type CreateUserRequest struct {
+	Username string `json:"username" example:"roy"`
+	Email    string `json:"email" example:"a@b.com"`
+}
 
+// @Summary 創建用戶
+// @Tags User
+// @version 1.0
+// @Param request body CreateUserRequest true "create user request"
+// @produce json
+// @Success 200
+// @Router /user [post]
+func (uc *UserController) CreateUser(c *gin.Context) {
 	var req CreateUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(400, gin.H{

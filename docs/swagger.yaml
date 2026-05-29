@@ -1,0 +1,54 @@
+definitions:
+  controller.CreateUserRequest:
+    properties:
+      email:
+        example: a@b.com
+        type: string
+      username:
+        example: roy
+        type: string
+    type: object
+host: localhost:81
+info:
+  contact:
+    name: roy.xu
+  description: Gin swagger
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Gin swagger
+  version: "1.0"
+paths:
+  /user:
+    get:
+      parameters:
+      - description: user search by id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: 獲取用戶信息
+      tags:
+      - User
+    post:
+      parameters:
+      - description: create user request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: 創建用戶
+      tags:
+      - User
+swagger: "2.0"
