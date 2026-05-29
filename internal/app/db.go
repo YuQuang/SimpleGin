@@ -31,7 +31,6 @@ func InitDB(config *configs.Configuration) *sql.DB {
 
 	// Create connection pool.
 	db := sql.OpenDB(c)
-	defer db.Close()
 
 	// Make sure it works.
 	err = db.Ping()

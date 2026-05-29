@@ -13,6 +13,7 @@ func main() {
 
 	// Initialize Controllers and Services
 	var db = app.InitDB(&config)
+	defer db.Close()
 	var app = app.InitApp(&config, db)
 
 	router := gin.Default()

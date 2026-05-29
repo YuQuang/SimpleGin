@@ -7,5 +7,6 @@ import (
 )
 
 func SetupRoutes(router *gin.RouterGroup, app *app.App) {
-	router.GET("/json", app.UserController.GetUser)
+	router.GET("/user", app.UserController.GetUser)
+	router.POST("/user", app.UserController.CreateUser)
 }

@@ -1,11 +1,41 @@
 package service
 
 import (
+	"errors"
+
+	"github.com/royxu/simplegin/v2/internal/model"
 	"github.com/royxu/simplegin/v2/internal/repository"
 )
 
-type UserService struct{}
+type UserService struct {
+	UserRepository *repository.UserRepository
+}
 
-func (us *UserService) GetUser() string {
-	return repository.GetUser()
+func (us *UserService) GetUser(
+	id int,
+) (*model.User, error) {
+	user, err := us.UserRepository.GetUser(id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
+func (us *UserService) CreateUser(
+	email string,
+	username string,
+) error {
+
+	err := us.UserRepository.CreateUser(&model.User{
+		Username: username,
+		Email:    email,
+	})
+
+	if err != nil {
+		return errors.New("user already exists")
+	}
+
+	return nil
 }
