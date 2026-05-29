@@ -13,3 +13,16 @@ migrate -database postgres://<user>:<pwd>@<host>:<port>/<dbname>?sslmode=disable
 ```
 go run ./cmd/main.go
 ```
+
+## Reference
+參考資料:
+```
+參考如何建立專案檔案架構
+https://www.compilenrun.com/docs/framework/gin/gin-fundamentals/gin-directory-structure/#controllers
+
+Swagger如何使用
+https://github.com/swaggo/swag
+
+Go database migration tool
+https://github.com/golang-migrate/migrate
+```
