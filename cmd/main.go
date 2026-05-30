@@ -10,12 +10,9 @@ import (
 // @title Gin swagger
 // @version 1.0
 // @description Gin swagger
-
 // @contact.name roy.xu
-
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
-
 // @host localhost:81
 // schemes http
 func main() {

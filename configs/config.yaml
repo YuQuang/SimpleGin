@@ -1,2 +1,11 @@
+# Server config
 server.port: 81
 server.host: localhost
+server.mode: development
+
+# Database config
+db.port: 5432
+db.host: localhost
+db.user: postgres
+db.password: mysecretpassword
+db.name: postgres
