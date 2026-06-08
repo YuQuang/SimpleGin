@@ -16,13 +16,13 @@ type Configuration struct {
 	DBName     string
 }
 
-func InitConfig() Configuration {
+func InitConfig(yamlFile string) Configuration {
 	var serverConfig Configuration
 
 	config.WithOptions(config.ParseEnv)
 	config.AddDriver(yaml.Driver)
 
-	err := config.LoadFiles("configs/config.yaml")
+	err := config.LoadFiles(yamlFile)
 	if err != nil {
 		panic(err)
 	}

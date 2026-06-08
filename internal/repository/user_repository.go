@@ -11,9 +11,7 @@ type UserRepository struct {
 	DB *sql.DB
 }
 
-func (r *UserRepository) GetUser(
-	id int,
-) (*model.User, error) {
+func (r *UserRepository) GetUser(id int) (*model.User, error) {
 	rows, err := r.DB.Query(
 		`SELECT username, email FROM users WHERE id = $1`,
 		id)
@@ -34,9 +32,7 @@ func (r *UserRepository) GetUser(
 	return &user, nil
 }
 
-func (r *UserRepository) CreateUser(
-	user *model.User,
-) error {
+func (r *UserRepository) CreateUser(user *model.User) error {
 	_, err := r.DB.Query(
 		`INSERT INTO users (username, email) VALUES ($1, $2)`,
 		user.Username, user.Email)
@@ -46,4 +42,27 @@ func (r *UserRepository) CreateUser(
 	}
 
 	return nil
+}
+
+func (r *UserRepository) GetUsers() (*[]model.User, error) {
+	rows, err := r.DB.Query(
+		`SELECT id, username, email FROM users`,
+	)
+
+	if err != nil {
+		return nil, errors.New("Error fetching users")
+	}
+
+	users := make([]model.User, 0)
+	for rows.Next() {
+		var user model.User
+		rows.Scan(
+			&user.ID,
+			&user.Username,
+			&user.Email,
+		)
+		users = append(users, user)
+	}
+
+	return &users, nil
 }

@@ -1,5 +1,5 @@
 ############################
-#  這是正式用的環境設定        #
+#  這是測試用的環境設定        #
 ############################
 
 # Server config
@@ -8,7 +8,7 @@ server.host: localhost
 server.mode: development
 
 # Database config
-db.port: 5432
+db.port: 5433
 db.host: localhost
 db.user: postgres
 db.password: mysecretpassword

@@ -76,3 +76,23 @@ func (uc *UserController) CreateUser(c *gin.Context) {
 		"message": "ok",
 	})
 }
+
+// @Summary 獲取所有用戶信息
+// @Tags User
+// @version 1.0
+// @produce json
+// @Success 200
+// @Router /users [get]
+func (uc *UserController) GetUsers(c *gin.Context) {
+	users, err := uc.UserService.GetUsers()
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": "failed to get users",
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"users": users,
+	})
+}
