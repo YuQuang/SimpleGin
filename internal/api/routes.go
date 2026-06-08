@@ -7,7 +7,13 @@ import (
 
 func SetupRoutes(router *gin.RouterGroup, app *app.App) {
 
-	router.GET("/user", app.UserController.GetUser)
-	router.GET("/users", app.UserController.GetUsers)
-	router.POST("/user", app.UserController.CreateUser)
+	users := router.Group("/users")
+	{
+		users.POST("", app.UserController.CreateUser)
+		users.GET("", app.UserController.GetUsers)
+
+		users.DELETE("/:id", app.UserController.DeleteUser)
+		users.GET("/:id", app.UserController.GetUser)
+	}
+
 }
