@@ -8,5 +8,6 @@ import (
 func SetupRoutes(router *gin.RouterGroup, app *app.App) {
 
 	router.GET("/user", app.UserController.GetUser)
+	router.GET("/users", app.UserController.GetUsers)
 	router.POST("/user", app.UserController.CreateUser)
 }

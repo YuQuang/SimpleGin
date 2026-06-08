@@ -39,3 +39,13 @@ func (us *UserService) CreateUser(
 
 	return nil
 }
+
+func (us *UserService) GetUsers() (*[]model.User, error) {
+	users, err := us.UserRepository.GetUsers()
+
+	if err != nil {
+		return nil, err
+	}
+
+	return users, nil
+}

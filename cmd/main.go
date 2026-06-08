@@ -17,7 +17,7 @@ import (
 // schemes http
 func main() {
 	// Initialize configuration
-	var config = configs.InitConfig()
+	var config = configs.InitConfig("./configs/config.yaml")
 
 	// Initialize Controllers and Services
 	var db = App.InitDB(&config)

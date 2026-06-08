@@ -51,4 +51,14 @@ paths:
       summary: 創建用戶
       tags:
       - User
+  /users:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: 獲取所有用戶信息
+      tags:
+      - User
 swagger: "2.0"
