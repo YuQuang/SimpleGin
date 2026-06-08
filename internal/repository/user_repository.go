@@ -11,8 +11,8 @@ type UserRepository struct {
 	DB *sql.DB
 }
 
-func (r *UserRepository) GetUser(id int) (*model.User, error) {
-	rows, err := r.DB.Query(
+func (ur *UserRepository) GetUser(id int) (*model.User, error) {
+	rows, err := ur.DB.Query(
 		`SELECT username, email FROM users WHERE id = $1`,
 		id)
 
@@ -32,8 +32,8 @@ func (r *UserRepository) GetUser(id int) (*model.User, error) {
 	return &user, nil
 }
 
-func (r *UserRepository) CreateUser(user *model.User) error {
-	_, err := r.DB.Query(
+func (ur *UserRepository) CreateUser(user *model.User) error {
+	_, err := ur.DB.Exec(
 		`INSERT INTO users (username, email) VALUES ($1, $2)`,
 		user.Username, user.Email)
 
@@ -44,8 +44,8 @@ func (r *UserRepository) CreateUser(user *model.User) error {
 	return nil
 }
 
-func (r *UserRepository) GetUsers() (*[]model.User, error) {
-	rows, err := r.DB.Query(
+func (ur *UserRepository) GetUsers() (*[]model.User, error) {
+	rows, err := ur.DB.Query(
 		`SELECT id, username, email FROM users`,
 	)
 
@@ -65,4 +65,16 @@ func (r *UserRepository) GetUsers() (*[]model.User, error) {
 	}
 
 	return &users, nil
+}
+
+func (ur *UserRepository) DeleteUser(id int) error {
+	_, err := ur.DB.Exec(
+		`DELETE FROM users WHERE id = $1`,
+		id)
+
+	if err != nil {
+		return errors.New("Error deleting user")
+	}
+
+	return nil
 }

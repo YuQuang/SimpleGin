@@ -49,3 +49,7 @@ func (us *UserService) GetUsers() (*[]model.User, error) {
 
 	return users, nil
 }
+
+func (us *UserService) DeleteUser(id int) error {
+	return us.UserRepository.DeleteUser(id)
+}

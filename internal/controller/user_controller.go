@@ -21,7 +21,7 @@ type UserController struct {
 // @Router /user [get]
 func (uc *UserController) GetUser(c *gin.Context) {
 
-	id, err := strconv.Atoi(c.Query("id"))
+	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(400, gin.H{
 			"message": "invalid id",
@@ -94,5 +94,34 @@ func (uc *UserController) GetUsers(c *gin.Context) {
 
 	c.JSON(200, gin.H{
 		"users": users,
+	})
+}
+
+// @Summary 刪除用戶
+// @Tags User
+// @version 1.0
+// @produce json
+// @Success 200
+// @Router /user [delete]
+func (uc *UserController) DeleteUser(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": "failed to get user id",
+		})
+		return
+	}
+
+	err = uc.UserService.DeleteUser(id)
+
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": "failed to delete user",
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": "success",
 	})
 }
