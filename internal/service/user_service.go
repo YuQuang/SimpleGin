@@ -11,18 +11,6 @@ type UserService struct {
 	UserRepository *repository.UserRepository
 }
 
-func (us *UserService) GetUser(
-	id int,
-) (*model.User, error) {
-	user, err := us.UserRepository.GetUser(id)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return user, nil
-}
-
 func (us *UserService) CreateUser(
 	email string,
 	username string,
@@ -40,6 +28,22 @@ func (us *UserService) CreateUser(
 	return nil
 }
 
+func (us *UserService) DeleteUser(id int) error {
+	return us.UserRepository.DeleteUser(id)
+}
+
+func (us *UserService) GetUser(
+	id int,
+) (*model.User, error) {
+	user, err := us.UserRepository.GetUser(id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
 func (us *UserService) GetUsers() (*[]model.User, error) {
 	users, err := us.UserRepository.GetUsers()
 
@@ -48,8 +52,4 @@ func (us *UserService) GetUsers() (*[]model.User, error) {
 	}
 
 	return users, nil
-}
-
-func (us *UserService) DeleteUser(id int) error {
-	return us.UserRepository.DeleteUser(id)
 }

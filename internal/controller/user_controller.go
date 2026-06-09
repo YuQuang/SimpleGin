@@ -12,6 +12,64 @@ type UserController struct {
 	UserService *service.UserService
 }
 
+// @Summary 創建用戶
+// @Tags User
+// @version 1.0
+// @Param request body CreateUserRequest true "create user request"
+// @produce json
+// @Success 200
+// @Router /user [post]
+func (uc *UserController) CreateUser(c *gin.Context) {
+	var req CreateUserRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "invalid request body",
+		})
+		return
+	}
+
+	err := uc.UserService.CreateUser(req.Email, req.Username)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": "ok",
+	})
+}
+
+// @Summary 刪除用戶
+// @Tags User
+// @version 1.0
+// @produce json
+// @Success 200
+// @Router /user [delete]
+func (uc *UserController) DeleteUser(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": "failed to get user id",
+		})
+		return
+	}
+
+	err = uc.UserService.DeleteUser(id)
+
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": "failed to delete user",
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": "success",
+	})
+}
+
 // @Summary 獲取用戶信息
 // @Tags User
 // @version 1.0
@@ -48,35 +106,6 @@ type CreateUserRequest struct {
 	Email    string `json:"email" example:"a@b.com"`
 }
 
-// @Summary 創建用戶
-// @Tags User
-// @version 1.0
-// @Param request body CreateUserRequest true "create user request"
-// @produce json
-// @Success 200
-// @Router /user [post]
-func (uc *UserController) CreateUser(c *gin.Context) {
-	var req CreateUserRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(400, gin.H{
-			"message": "invalid request body",
-		})
-		return
-	}
-
-	err := uc.UserService.CreateUser(req.Email, req.Username)
-	if err != nil {
-		c.JSON(400, gin.H{
-			"message": err.Error(),
-		})
-		return
-	}
-
-	c.JSON(200, gin.H{
-		"message": "ok",
-	})
-}
-
 // @Summary 獲取所有用戶信息
 // @Tags User
 // @version 1.0
@@ -94,34 +123,5 @@ func (uc *UserController) GetUsers(c *gin.Context) {
 
 	c.JSON(200, gin.H{
 		"users": users,
-	})
-}
-
-// @Summary 刪除用戶
-// @Tags User
-// @version 1.0
-// @produce json
-// @Success 200
-// @Router /user [delete]
-func (uc *UserController) DeleteUser(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		c.JSON(400, gin.H{
-			"message": "failed to get user id",
-		})
-		return
-	}
-
-	err = uc.UserService.DeleteUser(id)
-
-	if err != nil {
-		c.JSON(400, gin.H{
-			"message": "failed to delete user",
-		})
-		return
-	}
-
-	c.JSON(200, gin.H{
-		"message": "success",
 	})
 }
