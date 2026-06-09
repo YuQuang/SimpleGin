@@ -19,20 +19,14 @@ info:
   title: Gin swagger
   version: "1.0"
 paths:
-  /user:
+  /users:
     get:
-      parameters:
-      - description: user search by id
-        in: query
-        name: id
-        required: true
-        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
-      summary: 獲取用戶信息
+      summary: 獲取所有用戶信息
       tags:
       - User
     post:
@@ -51,14 +45,38 @@ paths:
       summary: 創建用戶
       tags:
       - User
-  /users:
-    get:
+  /users/:id:
+    delete:
       produces:
       - application/json
       responses:
         "200":
           description: OK
-      summary: 獲取所有用戶信息
+      summary: 刪除用戶
+      tags:
+      - User
+    get:
+      parameters:
+      - description: user search by id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: 獲取用戶信息
+      tags:
+      - User
+    patch:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: 更新用戶信息
       tags:
       - User
 swagger: "2.0"

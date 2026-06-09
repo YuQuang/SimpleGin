@@ -15,10 +15,25 @@ migrate -database postgres://<user>:<pwd>@<host>:<port>/<dbname>?sslmode=disable
 ```
 
 
+## Create SWAGGER DOCS
+使用的套件是 swaggo
+``` bash
+swag init -g ./cmd/main.go
+```
+這會根據 controller 內的註釋產生 swagger 文件接著啟動伺服器
+``` bash
+go run ./cmd/main.go
+```
+開啟網頁 http://localhost:81/swagger/index.html
+
+詳細關於 swaggo 的套件可以參考最後附上的參考資料
+
+
 ## How to run
 ``` bash
 go run ./cmd/main.go
 ```
+
 
 ## Reference
 參考資料:
