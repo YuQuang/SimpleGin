@@ -11,6 +11,30 @@ type UserRepository struct {
 	DB *sql.DB
 }
 
+func (ur *UserRepository) CreateUser(user *model.User) error {
+	_, err := ur.DB.Exec(
+		`INSERT INTO users (username, email) VALUES ($1, $2)`,
+		user.Username, user.Email)
+
+	if err != nil {
+		return errors.New("user already exists")
+	}
+
+	return nil
+}
+
+func (ur *UserRepository) DeleteUser(id int) error {
+	_, err := ur.DB.Exec(
+		`DELETE FROM users WHERE id = $1`,
+		id)
+
+	if err != nil {
+		return errors.New("Error deleting user")
+	}
+
+	return nil
+}
+
 func (ur *UserRepository) GetUser(id int) (*model.User, error) {
 	rows, err := ur.DB.Query(
 		`SELECT username, email FROM users WHERE id = $1`,
@@ -30,18 +54,6 @@ func (ur *UserRepository) GetUser(id int) (*model.User, error) {
 	)
 
 	return &user, nil
-}
-
-func (ur *UserRepository) CreateUser(user *model.User) error {
-	_, err := ur.DB.Exec(
-		`INSERT INTO users (username, email) VALUES ($1, $2)`,
-		user.Username, user.Email)
-
-	if err != nil {
-		return errors.New("user already exists")
-	}
-
-	return nil
 }
 
 func (ur *UserRepository) GetUsers() (*[]model.User, error) {
@@ -65,16 +77,4 @@ func (ur *UserRepository) GetUsers() (*[]model.User, error) {
 	}
 
 	return &users, nil
-}
-
-func (ur *UserRepository) DeleteUser(id int) error {
-	_, err := ur.DB.Exec(
-		`DELETE FROM users WHERE id = $1`,
-		id)
-
-	if err != nil {
-		return errors.New("Error deleting user")
-	}
-
-	return nil
 }

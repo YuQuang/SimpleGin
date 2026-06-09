@@ -26,6 +26,32 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
+func TestRepositoryDeleteUser(t *testing.T) {
+	userRepository := repo.UserRepository{
+		DB: db,
+	}
+
+	newUser := model.User{
+		Username: "testuser",
+		Email:    "testuser@example.com",
+	}
+	err := userRepository.CreateUser(&newUser)
+	require.NoError(t, err)
+
+	users, err := userRepository.GetUsers()
+	require.NoError(t, err)
+	require.NotNil(t, users)
+	assert.Equal(t, 1, len(*users), "User should be 1")
+
+	err = userRepository.DeleteUser(int((*users)[0].ID))
+	require.NoError(t, err)
+
+	users, err = userRepository.GetUsers()
+	require.NoError(t, err)
+	require.NotNil(t, users)
+	assert.Equal(t, 0, len(*users), "User should be 0")
+}
+
 func TestRepositoryGetUsers(t *testing.T) {
 	userRepository := repo.UserRepository{
 		DB: db,
@@ -55,30 +81,4 @@ func TestRepositoryGetUsers(t *testing.T) {
 		err := userRepository.DeleteUser(int(user.ID))
 		require.NoError(t, err)
 	}
-}
-
-func TestRepositoryDeleteUser(t *testing.T) {
-	userRepository := repo.UserRepository{
-		DB: db,
-	}
-
-	newUser := model.User{
-		Username: "testuser",
-		Email:    "testuser@example.com",
-	}
-	err := userRepository.CreateUser(&newUser)
-	require.NoError(t, err)
-
-	users, err := userRepository.GetUsers()
-	require.NoError(t, err)
-	require.NotNil(t, users)
-	assert.Equal(t, 1, len(*users), "User should be 1")
-
-	err = userRepository.DeleteUser(int((*users)[0].ID))
-	require.NoError(t, err)
-
-	users, err = userRepository.GetUsers()
-	require.NoError(t, err)
-	require.NotNil(t, users)
-	assert.Equal(t, 0, len(*users), "User should be 0")
 }
