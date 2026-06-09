@@ -12,13 +12,18 @@ type UserController struct {
 	UserService *service.UserService
 }
 
+type CreateUserRequest struct {
+	Username string `json:"username" example:"roy"`
+	Email    string `json:"email" example:"a@b.com"`
+}
+
 // @Summary 創建用戶
 // @Tags User
 // @version 1.0
 // @Param request body CreateUserRequest true "create user request"
 // @produce json
 // @Success 200
-// @Router /user [post]
+// @Router /users [post]
 func (uc *UserController) CreateUser(c *gin.Context) {
 	var req CreateUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -46,7 +51,7 @@ func (uc *UserController) CreateUser(c *gin.Context) {
 // @version 1.0
 // @produce json
 // @Success 200
-// @Router /user [delete]
+// @Router /users/:id [delete]
 func (uc *UserController) DeleteUser(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -76,7 +81,7 @@ func (uc *UserController) DeleteUser(c *gin.Context) {
 // @Param	id	query	int	true	"user search by id"
 // @produce json
 // @Success 200
-// @Router /user [get]
+// @Router /users/:id [get]
 func (uc *UserController) GetUser(c *gin.Context) {
 
 	id, err := strconv.Atoi(c.Param("id"))
@@ -101,11 +106,6 @@ func (uc *UserController) GetUser(c *gin.Context) {
 	})
 }
 
-type CreateUserRequest struct {
-	Username string `json:"username" example:"roy"`
-	Email    string `json:"email" example:"a@b.com"`
-}
-
 // @Summary 獲取所有用戶信息
 // @Tags User
 // @version 1.0
@@ -123,5 +123,36 @@ func (uc *UserController) GetUsers(c *gin.Context) {
 
 	c.JSON(200, gin.H{
 		"users": users,
+	})
+}
+
+// @Summary 更新用戶信息
+// @Tags User
+// @version 1.0
+// @produce json
+// @Success 200
+// @Router /users/:id [patch]
+func (uc *UserController) PatchUser(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": "invalid id",
+		})
+		return
+	}
+	err = uc.UserService.PatchUser(
+		c.Query("email"),
+		c.Query("username"),
+		id,
+	)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": "Patch user failed",
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": "success",
 	})
 }

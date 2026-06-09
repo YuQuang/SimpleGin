@@ -53,3 +53,21 @@ func (us *UserService) GetUsers() (*[]model.User, error) {
 
 	return users, nil
 }
+
+func (us *UserService) PatchUser(
+	email string,
+	username string,
+	id int,
+) error {
+	err := us.UserRepository.PatchUser(&model.User{
+		Email:    email,
+		Username: username,
+		ID:       int64(id),
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

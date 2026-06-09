@@ -3,6 +3,8 @@ package repository
 import (
 	"database/sql"
 	"errors"
+	"fmt"
+	"strings"
 
 	"github.com/royxu/simplegin/v2/internal/model"
 )
@@ -77,4 +79,38 @@ func (ur *UserRepository) GetUsers() (*[]model.User, error) {
 	}
 
 	return &users, nil
+}
+
+func (ur *UserRepository) PatchUser(user *model.User) error {
+	sets := []string{}
+	args := []any{}
+	i := 1
+	if user.Username != "" {
+		sets = append(sets, fmt.Sprintf("username = $%d", i))
+		args = append(args, user.Username)
+		i++
+	}
+	if user.Email != "" {
+		sets = append(sets, fmt.Sprintf("email = $%d", i))
+		args = append(args, user.Email)
+		i++
+	}
+	query := fmt.Sprintf(
+		"UPDATE users SET %s WHERE id = $%d",
+		strings.Join(sets, ", "),
+		i,
+	)
+	args = append(args, user.ID)
+
+	res, err := ur.DB.Exec(query, args...)
+
+	rows, _ := res.RowsAffected()
+	if rows == 0 {
+		return fmt.Errorf("user not found")
+	}
+	if err != nil {
+		return fmt.Errorf("update user: %w", err)
+	}
+
+	return nil
 }
