@@ -9,7 +9,7 @@ on:
 
 jobs:
   unit_test:
-    runs-on: dgolang:tip-alpine3.23
+    runs-on: golang:tip-alpine3.23
 
     steps:
       # 在 Runner 上使用 shell 顯示出 Hello world
