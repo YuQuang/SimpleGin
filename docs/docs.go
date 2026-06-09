@@ -21,7 +21,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/user": {
+        "/users": {
             "get": {
                 "produces": [
                     "application/json"
@@ -29,16 +29,7 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "獲取用戶信息",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "user search by id",
-                        "name": "id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
+                "summary": "獲取所有用戶信息",
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -71,7 +62,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users": {
+        "/users/:id": {
             "get": {
                 "produces": [
                     "application/json"
@@ -79,7 +70,44 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "獲取所有用戶信息",
+                "summary": "獲取用戶信息",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user search by id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "刪除用戶",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "patch": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "更新用戶信息",
                 "responses": {
                     "200": {
                         "description": "OK"
