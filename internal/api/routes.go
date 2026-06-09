@@ -13,6 +13,7 @@ func SetupRoutes(router *gin.RouterGroup, app *app.App) {
 		users.GET("", app.UserController.GetUsers)
 
 		users.DELETE("/:id", app.UserController.DeleteUser)
+		users.PATCH("/:id", app.UserController.PatchUser)
 		users.GET("/:id", app.UserController.GetUser)
 	}
 
