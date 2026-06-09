@@ -62,7 +62,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/:id": {
+        "/users/{id}": {
             "get": {
                 "produces": [
                     "application/json"
@@ -76,7 +76,7 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "user search by id",
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "required": true
                     }
                 ],
@@ -94,6 +94,15 @@ const docTemplate = `{
                     "User"
                 ],
                 "summary": "刪除用戶",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user search by id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -108,6 +117,27 @@ const docTemplate = `{
                     "User"
                 ],
                 "summary": "更新用戶信息",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user search by id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "username",
+                        "name": "username",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "email",
+                        "name": "email",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"

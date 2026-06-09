@@ -49,9 +49,10 @@ func (uc *UserController) CreateUser(c *gin.Context) {
 // @Summary 刪除用戶
 // @Tags User
 // @version 1.0
+// @Param	id	path	int	true	"user search by id"
 // @produce json
 // @Success 200
-// @Router /users/:id [delete]
+// @Router /users/{id} [delete]
 func (uc *UserController) DeleteUser(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -78,10 +79,10 @@ func (uc *UserController) DeleteUser(c *gin.Context) {
 // @Summary 獲取用戶信息
 // @Tags User
 // @version 1.0
-// @Param	id	query	int	true	"user search by id"
+// @Param	id	path	int	true	"user search by id"
 // @produce json
 // @Success 200
-// @Router /users/:id [get]
+// @Router /users/{id} [get]
 func (uc *UserController) GetUser(c *gin.Context) {
 
 	id, err := strconv.Atoi(c.Param("id"))
@@ -129,9 +130,12 @@ func (uc *UserController) GetUsers(c *gin.Context) {
 // @Summary 更新用戶信息
 // @Tags User
 // @version 1.0
+// @Param	id	path	int	true	"user search by id"
+// @Param	username	query	string	false	"username"
+// @Param	email	query	string	false	"email"
 // @produce json
 // @Success 200
-// @Router /users/:id [patch]
+// @Router /users/{id} [patch]
 func (uc *UserController) PatchUser(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {

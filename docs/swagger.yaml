@@ -45,8 +45,14 @@ paths:
       summary: 創建用戶
       tags:
       - User
-  /users/:id:
+  /users/{id}:
     delete:
+      parameters:
+      - description: user search by id
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -58,7 +64,7 @@ paths:
     get:
       parameters:
       - description: user search by id
-        in: query
+        in: path
         name: id
         required: true
         type: integer
@@ -71,6 +77,20 @@ paths:
       tags:
       - User
     patch:
+      parameters:
+      - description: user search by id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: username
+        in: query
+        name: username
+        type: string
+      - description: email
+        in: query
+        name: email
+        type: string
       produces:
       - application/json
       responses:
