@@ -14,6 +14,7 @@ func SetupRoutes(router *gin.RouterGroup, app *app.App) {
 
 		users.DELETE("/:id", app.UserController.DeleteUser)
 		users.PATCH("/:id", app.UserController.PatchUser)
+		users.PUT("/:id", app.UserController.PutUser)
 		users.GET("/:id", app.UserController.GetUser)
 	}
 

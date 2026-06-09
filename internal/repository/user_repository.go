@@ -109,7 +109,23 @@ func (ur *UserRepository) PatchUser(user *model.User) error {
 		return fmt.Errorf("user not found")
 	}
 	if err != nil {
-		return fmt.Errorf("update user: %w", err)
+		return fmt.Errorf("failed to update user: %w", err)
+	}
+
+	return nil
+}
+
+func (ur *UserRepository) PutUser(user *model.User) error {
+	res, err := ur.DB.Exec(
+		`UPDATE users SET username = $1, email = $2 WHERE id = $3`,
+		user.Username, user.Email, user.ID)
+
+	rows, _ := res.RowsAffected()
+	if rows == 0 {
+		return fmt.Errorf("user not found")
+	}
+	if err != nil {
+		return fmt.Errorf("failed to update user: %w", err)
 	}
 
 	return nil
