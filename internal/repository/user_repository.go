@@ -2,7 +2,6 @@ package repository
 
 import (
 	"database/sql"
-	"errors"
 	"fmt"
 	"strings"
 
@@ -19,7 +18,7 @@ func (ur *UserRepository) CreateUser(user *model.User) error {
 		user.Username, user.Email)
 
 	if err != nil {
-		return errors.New("user already exists")
+		return fmt.Errorf("failed to create user: %w", err)
 	}
 
 	return nil
@@ -31,7 +30,7 @@ func (ur *UserRepository) DeleteUser(id int) error {
 		id)
 
 	if err != nil {
-		return errors.New("Error deleting user")
+		return fmt.Errorf("failed to delete user: %w", err)
 	}
 
 	return nil
@@ -43,10 +42,10 @@ func (ur *UserRepository) GetUser(id int) (*model.User, error) {
 		id)
 
 	if err != nil {
-		return &model.User{}, errors.New("Query error")
+		return nil, fmt.Errorf("failed to get user: %w", err)
 	}
 	if !rows.Next() {
-		return &model.User{}, errors.New("user not found")
+		return nil, fmt.Errorf("user not found: %w", err)
 	}
 
 	var user model.User
@@ -62,9 +61,8 @@ func (ur *UserRepository) GetUsers() (*[]model.User, error) {
 	rows, err := ur.DB.Query(
 		`SELECT id, username, email FROM users`,
 	)
-
 	if err != nil {
-		return nil, errors.New("Error fetching users")
+		return nil, fmt.Errorf("failed to get users: %w", err)
 	}
 
 	users := make([]model.User, 0)
@@ -106,7 +104,7 @@ func (ur *UserRepository) PatchUser(user *model.User) error {
 
 	rows, _ := res.RowsAffected()
 	if rows == 0 {
-		return fmt.Errorf("user not found")
+		return fmt.Errorf("failed to update user: user not found")
 	}
 	if err != nil {
 		return fmt.Errorf("failed to update user: %w", err)
@@ -122,7 +120,7 @@ func (ur *UserRepository) PutUser(user *model.User) error {
 
 	rows, _ := res.RowsAffected()
 	if rows == 0 {
-		return fmt.Errorf("user not found")
+		return fmt.Errorf("failed to update user: user not found")
 	}
 	if err != nil {
 		return fmt.Errorf("failed to update user: %w", err)

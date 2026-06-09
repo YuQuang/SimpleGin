@@ -1,8 +1,6 @@
 package service
 
 import (
-	"errors"
-
 	"github.com/royxu/simplegin/v2/internal/model"
 	"github.com/royxu/simplegin/v2/internal/repository"
 )
@@ -20,9 +18,8 @@ func (us *UserService) CreateUser(
 		Username: username,
 		Email:    email,
 	})
-
 	if err != nil {
-		return errors.New("user already exists")
+		return err
 	}
 
 	return nil
