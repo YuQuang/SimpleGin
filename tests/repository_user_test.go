@@ -83,6 +83,50 @@ func TestRepositoryGetUsers(t *testing.T) {
 	}
 }
 
+func TestRepositoryPatchUser(t *testing.T) {
+	userRepository := repo.UserRepository{
+		DB: db,
+	}
+
+	newUser := model.User{
+		Username: "testuser1",
+		Email:    "testuser1@example.com",
+	}
+	err := userRepository.CreateUser(&newUser)
+	require.NoError(t, err)
+
+	users, err := userRepository.GetUsers()
+	require.NoError(t, err)
+	err = userRepository.PatchUser(&model.User{
+		Username: "updateduser",
+		ID:       int64((*users)[0].ID),
+	})
+	require.NoError(t, err)
+
+	users, err = userRepository.GetUsers()
+	require.NoError(t, err)
+	require.NotNil(t, users)
+	assert.Equal(t, "updateduser", (*users)[0].Username, "User should be updated")
+	assert.Equal(t, "testuser1@example.com", (*users)[0].Email, "User should not be updated")
+
+	err = userRepository.PatchUser(&model.User{
+		Email: "updateduser@example.com",
+		ID:    int64((*users)[0].ID),
+	})
+	require.NoError(t, err)
+
+	users, err = userRepository.GetUsers()
+	require.NoError(t, err)
+	require.NotNil(t, users)
+	assert.Equal(t, "updateduser", (*users)[0].Username, "User should not be updated")
+	assert.Equal(t, "updateduser@example.com", (*users)[0].Email, "User should be updated")
+
+	for _, user := range *users {
+		err := userRepository.DeleteUser(int(user.ID))
+		require.NoError(t, err)
+	}
+}
+
 func TestRepositoryPutUser(t *testing.T) {
 	userRepository := repo.UserRepository{
 		DB: db,
