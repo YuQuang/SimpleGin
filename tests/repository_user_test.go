@@ -5,6 +5,9 @@ import (
 	"os"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
 	"github.com/royxu/simplegin/v2/configs"
 	App "github.com/royxu/simplegin/v2/internal/app"
 	model "github.com/royxu/simplegin/v2/internal/model"
@@ -40,24 +43,17 @@ func TestRepositoryGetUsers(t *testing.T) {
 	}
 	for _, newUser := range newUsers {
 		err := userRepository.CreateUser(&newUser)
-		if err != nil {
-			t.Errorf("Create user failed: %v", err)
-		}
+		require.NoError(t, err)
 	}
 
 	users, err := userRepository.GetUsers()
-	if err != nil {
-		t.Fatalf("Expected no error, got %v", err)
-	}
-	if len(*users) != 2 {
-		t.Errorf("Expected 2 users, got %d", len(*users))
-	}
+	require.NoError(t, err)
+	require.NotNil(t, users)
+	assert.Equal(t, 2, len(*users), "User should be 2")
 
 	for _, user := range *users {
 		err := userRepository.DeleteUser(int(user.ID))
-		if err != nil {
-			t.Errorf("Failed to delete user: %v", err)
-		}
+		require.NoError(t, err)
 	}
 }
 
@@ -70,20 +66,19 @@ func TestRepositoryDeleteUser(t *testing.T) {
 		Username: "testuser",
 		Email:    "testuser@example.com",
 	}
-	userRepository.CreateUser(&newUser)
+	err := userRepository.CreateUser(&newUser)
+	require.NoError(t, err)
 
 	users, err := userRepository.GetUsers()
-	if len(*users) != 1 {
-		t.Errorf("Expected 1 users, got %d", len(*users))
-	}
+	require.NoError(t, err)
+	require.NotNil(t, users)
+	assert.Equal(t, 1, len(*users), "User should be 1")
 
 	err = userRepository.DeleteUser(int((*users)[0].ID))
-	if err != nil {
-		t.Fatalf("Expected no error, got %v", err)
-	}
+	require.NoError(t, err)
 
 	users, err = userRepository.GetUsers()
-	if len(*users) != 0 {
-		t.Errorf("Expected 0 users, got %d", len(*users))
-	}
+	require.NoError(t, err)
+	require.NotNil(t, users)
+	assert.Equal(t, 0, len(*users), "User should be 0")
 }
