@@ -1,0 +1,23 @@
+name: Unit Test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  unit_test:
+    runs-on: dgolang:tip-alpine3.23
+
+    steps:
+      # 在 Runner 上使用 shell 顯示出 Hello world
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      # 執行一組的指令
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
