@@ -160,3 +160,51 @@ func (uc *UserController) PatchUser(c *gin.Context) {
 		"message": "success",
 	})
 }
+
+// @Summary 覆蓋用戶信息
+// @Tags User
+// @version 1.0
+// @Param	id	path	int	true	"user search by id"
+// @Param	username	query	string	true	"username"
+// @Param	email	query	string	true	"email"
+// @produce json
+// @Success 200
+// @Router /users/{id} [put]
+func (uc *UserController) PutUser(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": "invalid id",
+		})
+		return
+	}
+	email := c.Query("email")
+	if email == "" {
+		c.JSON(400, gin.H{
+			"message": "missing email",
+		})
+		return
+	}
+	username := c.Query("username")
+	if username == "" {
+		c.JSON(400, gin.H{
+			"message": "missing username",
+		})
+		return
+	}
+	err = uc.UserService.PutUser(
+		email,
+		username,
+		id,
+	)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": "Put user failed",
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": "success",
+	})
+}

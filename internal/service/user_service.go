@@ -71,3 +71,21 @@ func (us *UserService) PatchUser(
 
 	return nil
 }
+
+func (us *UserService) PutUser(
+	email string,
+	username string,
+	id int,
+) error {
+	err := us.UserRepository.PutUser(&model.User{
+		Email:    email,
+		Username: username,
+		ID:       int64(id),
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
