@@ -1,21 +1,35 @@
 # SimpleGin
-練習專案，實作用戶認證後端以及RestFul API以及專案目錄管理。
+1. 實作 JWT 用戶認證後端
+2. RestFul API
+3. 專案目錄管理
+4. Swagger
+5. 資料庫 Migration
+6. 自動化測試
 
 
-## Run database migration
-Install
+## Index
+- [Migration](#Migration)
+- [Swagger](#Swagger)
+- [Start](#Start)
+- [Testcase](#Testcase)
+- [Reference](#Reference)
+---
+
+
+## Migration
+安裝
 [golang-migrate](https://github.com/golang-migrate/migrate)
-then run
+然後執行
 ``` bash
 migrate -database postgres://<user>:<pwd>@<host>:<port>/<dbname>?sslmode=disable -path ./migrations up
 ```
-For rollback please run
+如果需要回滾則執行
 ``` bash
 migrate -database postgres://<user>:<pwd>@<host>:<port>/<dbname>?sslmode=disable -path ./migrations down
 ```
 
 
-## Create SWAGGER DOCS
+## Swagger
 使用的套件是 swaggo
 ``` bash
 swag init -g ./cmd/main.go
@@ -29,9 +43,25 @@ go run ./cmd/main.go
 詳細關於 swaggo 的套件可以參考最後附上的參考資料
 
 
-## How to run
+## Start
 ``` bash
 go run ./cmd/main.go
+```
+
+
+## Testcase
+如果需要執行測試的話需要先準備環境
+``` bash
+# 測試環境檔路徑
+/configs/config.test.yaml
+# 設定好 PostgreSQL 設定之後便可以開始測試
+```
+執行 Go test
+``` bash
+# -count=1 取消快取
+# -v 顯示更多資訊
+# 執行 tests 路徑底下所有測試
+go test -count=1 -v ./tests/
 ```
 
 
