@@ -25,11 +25,15 @@ func InitApp(config *configs.Configuration, db *sql.DB) App {
 	}
 
 	authController := &controller.AuthController{
-		JWTManager: utils.NewJWTManager(
-			config.JWTSecret,
-			config.JWTExpiry,
-		),
-		AuthService: &service.AuthService{},
+		AuthService: &service.AuthService{
+			JWTManager: utils.NewJWTManager(
+				config.JWTSecret,
+				config.JWTExpiry,
+			),
+			UserRepository: &repository.UserRepository{
+				DB: db,
+			},
+		},
 	}
 
 	return App{

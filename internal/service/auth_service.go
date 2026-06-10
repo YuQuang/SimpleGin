@@ -1,45 +1,40 @@
 package service
 
 import (
-	"encoding/base64"
 	"fmt"
 
-	"golang.org/x/crypto/argon2"
+	"github.com/royxu/simplegin/v2/internal/repository"
+	"github.com/royxu/simplegin/v2/internal/utils"
 )
 
 type AuthService struct {
+	JWTManager     *utils.JWTManager
+	UserRepository *repository.UserRepository
 }
 
 func (as *AuthService) Login(
-	email string,
-	username string,
+	identifier string,
 	password string,
 ) (string, error) {
-	if email == "" {
 
+	user, err := as.UserRepository.GetUserByIdentifier(identifier)
+	if err != nil {
+		return "", err
 	}
-	if username == "" {
 
+	res := utils.VerifyPassword(user.Password, password)
+	if !res {
+		return "", fmt.Errorf("invalid credentials")
 	}
 
-	hash := argon2.IDKey(
-		[]byte(password),
-		[]byte("3f347f9643deb1679d43765d4d38cae8"),
-		3,
-		32*1024,
-		4,
-		32,
+	token, err := as.JWTManager.GenerateToken(
+		uint(user.ID),
+		user.Username,
+		user.Email,
 	)
+	if err != nil {
+		return "", err
+	}
 
-	encoded := fmt.Sprintf(
-		"$argon2id$v=%d$m=%d,t=%d,p=%d$%s$%s",
-		argon2.Version,
-		32*1024,
-		3,
-		4,
-		base64.RawStdEncoding.EncodeToString([]byte("3f347f9643deb1679d43765d4d38cae8")),
-		base64.RawStdEncoding.EncodeToString(hash),
-	)
-
-	return string(encoded), nil
+	return token, nil
 }

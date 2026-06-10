@@ -4,24 +4,20 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/royxu/simplegin/v2/internal/service"
-	"github.com/royxu/simplegin/v2/internal/utils"
 )
 
 type AuthController struct {
-	JWTManager  *utils.JWTManager
 	AuthService *service.AuthService
 }
 type LoginRequest struct {
-	Username string `json:"username" example:"roy"`
-	Email    string `json:"email" example:"a@b.com"`
-	Password string `json:"password" example:"password123"`
+	Identifier string `json:"identifier" binding:"required"`
+	Password   string `json:"password" binding:"required"`
 }
 
 // @Summary 用戶登入
 // @Tags Auth
 // @version 1.0
-// @Param	username	query	string	true	"login username"
-// @Param	email	query	string	true	"login email"
+// @Param	identifier	query	string	true	"login identifier"
 // @Param	password	query	string	true	"login password"
 // @produce json
 // @Success 200
@@ -35,10 +31,10 @@ func (ac *AuthController) Login(c *gin.Context) {
 		return
 	}
 
-	token, err := ac.AuthService.Login(req.Email, req.Username, req.Password)
+	token, err := ac.AuthService.Login(req.Identifier, req.Password)
 	if err != nil {
 		c.JSON(400, gin.H{
-			"message": "login failed",
+			"message": err.Error(),
 		})
 		return
 	}
