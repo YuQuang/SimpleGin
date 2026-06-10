@@ -17,6 +17,16 @@ func (us *UserService) CreateUser(
 	username string,
 	password string,
 ) error {
+	if !utils.ValidatePassword(password) {
+		return fmt.Errorf("Password is invalid")
+	}
+	if !utils.ValidateUsername(username) {
+		return fmt.Errorf("Username is invalid")
+	}
+	if !utils.ValidateEmail(email) {
+		return fmt.Errorf("Email is invalid")
+	}
+
 	salt, err := utils.GenerateSalt(16)
 	if err != nil {
 		return fmt.Errorf("Generate salt failed")
