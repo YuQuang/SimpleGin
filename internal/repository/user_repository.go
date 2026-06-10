@@ -38,7 +38,7 @@ func (ur *UserRepository) DeleteUser(id int) error {
 
 func (ur *UserRepository) GetUser(id int) (*model.User, error) {
 	rows, err := ur.DB.Query(
-		`SELECT username, email FROM users WHERE id = $1`,
+		`SELECT id, username, email FROM users WHERE id = $1`,
 		id)
 
 	if err != nil {
@@ -50,6 +50,7 @@ func (ur *UserRepository) GetUser(id int) (*model.User, error) {
 
 	var user model.User
 	rows.Scan(
+		&user.ID,
 		&user.Username,
 		&user.Email,
 	)

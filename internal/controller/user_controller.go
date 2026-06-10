@@ -18,6 +18,12 @@ type CreateUserRequest struct {
 	Password string `json:"password" example:"password123" binding:"required"`
 }
 
+type GetUserResponse struct {
+	ID       int64  `json:"id" example:"124"`
+	Username string `json:"username" example:"roy"`
+	Email    string `json:"email" example:"a@b.com"`
+}
+
 // @Summary 創建用戶
 // @Tags User
 // @version 1.0
@@ -107,8 +113,11 @@ func (uc *UserController) GetUser(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{
-		"username": user.Username,
-		"email":    user.Email,
+		"data": &GetUserResponse{
+			ID:       user.ID,
+			Username: user.Username,
+			Email:    user.Email,
+		},
 	})
 }
 
@@ -120,6 +129,19 @@ func (uc *UserController) GetUser(c *gin.Context) {
 // @Router /users [get]
 func (uc *UserController) GetUsers(c *gin.Context) {
 	users, err := uc.UserService.GetUsers()
+
+	var getUserResponse []GetUserResponse = make([]GetUserResponse, 0)
+	for _, user := range *users {
+		getUserResponse = append(
+			getUserResponse,
+			GetUserResponse{
+				ID:       user.ID,
+				Username: user.Username,
+				Email:    user.Email,
+			},
+		)
+	}
+
 	if err != nil {
 		c.JSON(400, gin.H{
 			"message": "failed to get users",
@@ -128,7 +150,7 @@ func (uc *UserController) GetUsers(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{
-		"users": users,
+		"data": getUserResponse,
 	})
 }
 
