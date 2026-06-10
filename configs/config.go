@@ -14,6 +14,8 @@ type Configuration struct {
 	DBUser     string
 	DBPassword string
 	DBName     string
+	JWTSecret  string
+	JWTExpiry  int
 }
 
 func InitConfig(yamlFile string) Configuration {
@@ -35,5 +37,8 @@ func InitConfig(yamlFile string) Configuration {
 	serverConfig.DBUser = config.String("db.user", "postgres")
 	serverConfig.DBPassword = config.String("db.password", "mysecretpassword")
 	serverConfig.DBName = config.String("db.name", "postgres")
+	serverConfig.JWTSecret = config.String("jwt.secret", "mysecretkey")
+	serverConfig.JWTExpiry = config.Int("jwt.expiry", 1440)
+
 	return serverConfig
 }
