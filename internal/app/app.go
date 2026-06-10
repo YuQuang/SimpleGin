@@ -7,24 +7,37 @@ import (
 	"github.com/royxu/simplegin/v2/internal/controller"
 	"github.com/royxu/simplegin/v2/internal/repository"
 	"github.com/royxu/simplegin/v2/internal/service"
+	"github.com/royxu/simplegin/v2/internal/utils"
 )
 
 type App struct {
 	UserController *controller.UserController
+	AuthController *controller.AuthController
 }
 
 func InitApp(config *configs.Configuration, db *sql.DB) App {
-	userRepository := &repository.UserRepository{
-		DB: db,
+	userController := &controller.UserController{
+		UserService: &service.UserService{
+			UserRepository: &repository.UserRepository{
+				DB: db,
+			},
+		},
 	}
-	userService := &service.UserService{
-		UserRepository: userRepository,
-	}
-	UserController := &controller.UserController{
-		UserService: userService,
+
+	authController := &controller.AuthController{
+		AuthService: &service.AuthService{
+			JWTManager: utils.NewJWTManager(
+				config.JWTSecret,
+				config.JWTExpiry,
+			),
+			UserRepository: &repository.UserRepository{
+				DB: db,
+			},
+		},
 	}
 
 	return App{
-		UserController: UserController,
+		UserController: userController,
+		AuthController: authController,
 	}
 }

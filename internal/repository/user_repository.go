@@ -14,8 +14,8 @@ type UserRepository struct {
 
 func (ur *UserRepository) CreateUser(user *model.User) error {
 	_, err := ur.DB.Exec(
-		`INSERT INTO users (username, email) VALUES ($1, $2)`,
-		user.Username, user.Email)
+		`INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3)`,
+		user.Username, user.Email, user.Password)
 
 	if err != nil {
 		return fmt.Errorf("failed to create user: %w", err)
@@ -45,7 +45,7 @@ func (ur *UserRepository) GetUser(id int) (*model.User, error) {
 		return nil, fmt.Errorf("failed to get user: %w", err)
 	}
 	if !rows.Next() {
-		return nil, fmt.Errorf("user not found: %w", err)
+		return nil, fmt.Errorf("user not found")
 	}
 
 	var user model.User
@@ -77,6 +77,29 @@ func (ur *UserRepository) GetUsers() (*[]model.User, error) {
 	}
 
 	return &users, nil
+}
+
+func (ur *UserRepository) GetUserByIdentifier(identifier string) (*model.User, error) {
+	rows, err := ur.DB.Query(
+		`SELECT id, username, email, password_hash FROM users WHERE username = $1 OR email = $1`,
+		identifier)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user: %w", err)
+	}
+	if !rows.Next() {
+		return nil, fmt.Errorf("user not found")
+	}
+
+	var user model.User
+	rows.Scan(
+		&user.ID,
+		&user.Username,
+		&user.Email,
+		&user.Password,
+	)
+
+	return &user, nil
 }
 
 func (ur *UserRepository) PatchUser(user *model.User) error {

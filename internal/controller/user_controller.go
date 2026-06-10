@@ -13,8 +13,9 @@ type UserController struct {
 }
 
 type CreateUserRequest struct {
-	Username string `json:"username" example:"roy"`
-	Email    string `json:"email" example:"a@b.com"`
+	Username string `json:"username" example:"roy" binding:"required"`
+	Email    string `json:"email" example:"a@b.com" binding:"required"`
+	Password string `json:"password" example:"password123" binding:"required"`
 }
 
 // @Summary 創建用戶
@@ -33,7 +34,11 @@ func (uc *UserController) CreateUser(c *gin.Context) {
 		return
 	}
 
-	err := uc.UserService.CreateUser(req.Email, req.Username)
+	err := uc.UserService.CreateUser(
+		req.Email,
+		req.Username,
+		req.Password,
+	)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"message": err.Error(),

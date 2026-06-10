@@ -1,8 +1,11 @@
 package service
 
 import (
+	"fmt"
+
 	"github.com/royxu/simplegin/v2/internal/model"
 	"github.com/royxu/simplegin/v2/internal/repository"
+	"github.com/royxu/simplegin/v2/internal/utils"
 )
 
 type UserService struct {
@@ -12,11 +15,22 @@ type UserService struct {
 func (us *UserService) CreateUser(
 	email string,
 	username string,
+	password string,
 ) error {
+	salt, err := utils.GenerateSalt(16)
+	if err != nil {
+		return fmt.Errorf("Generate salt failed")
+	}
 
-	err := us.UserRepository.CreateUser(&model.User{
+	hashedPassword := utils.HashPassword(
+		password,
+		salt,
+	)
+
+	err = us.UserRepository.CreateUser(&model.User{
 		Username: username,
 		Email:    email,
+		Password: hashedPassword,
 	})
 	if err != nil {
 		return err

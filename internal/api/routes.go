@@ -18,4 +18,8 @@ func SetupRoutes(router *gin.RouterGroup, app *app.App) {
 		users.GET("/:id", app.UserController.GetUser)
 	}
 
+	auth := router.Group("/auth")
+	{
+		auth.POST("/login", app.AuthController.Login)
+	}
 }
