@@ -3,8 +3,8 @@
 ############################
 
 # Server config
-server.port: 81
-server.host: localhost
+server.port: 3000
+server.host: "0.0.0.0"
 server.mode: development
 
 # Database config
@@ -13,3 +13,7 @@ db.host: localhost
 db.user: postgres
 db.password: mysecretpassword
 db.name: postgres
+
+# Swagger config
+swagger.enabled: true
+swagger.host: "<public_ip>"
