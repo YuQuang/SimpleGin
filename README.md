@@ -8,6 +8,7 @@
 
 
 ## Index
+- [Setup PostgreSQL](#SetupPostgreSQL)
 - [Migration](#Migration)
 - [Swagger](#Swagger)
 - [Start](#Start)
@@ -15,6 +16,16 @@
 - [Reference](#Reference)
 ---
 
+
+## SetupPostgreSQL
+拉取 [PostgreSQL Image](https://hub.docker.com/_/postgres) 然後 Run 一個 container
+``` bash
+# Pull image
+docker pull postgres:19beta1-trixie
+
+# Run image
+docker run -itd -p 5432:5432 --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword postgres:19beta1-trixie
+```
 
 ## Migration
 安裝
