@@ -26,5 +26,7 @@ func SetupRoutes(router *gin.RouterGroup, app *app.App) {
 	memos := router.Group("/memos")
 	{
 		memos.POST("", app.MemoController.CreateMemo)
+
+		memos.GET(":id", app.MemoController.GetMemo)
 	}
 }

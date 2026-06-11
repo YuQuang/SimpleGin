@@ -40,3 +40,43 @@ func (mr *MemoRepository) CreateMemo(memo *model.Memo) (*model.Memo, error) {
 
 	return &newMemo, nil
 }
+
+func (mr *MemoRepository) GetMemo(
+	id int,
+) (*model.Memo, error) {
+	rows, err := mr.DB.Query(
+		`SELECT
+			id,
+			title,
+			content,
+			is_public,
+			created_at,
+			updated_at,
+			user_id
+		 FROM memos WHERE id = $1 AND deleted_at IS NULL;`,
+		id,
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get memo: %w", err)
+	}
+
+	if !rows.Next() {
+		return nil, fmt.Errorf("memo not found")
+	}
+
+	var newMemo model.Memo
+	err = rows.Scan(
+		&newMemo.ID,
+		&newMemo.Title,
+		&newMemo.Content,
+		&newMemo.IsPublic,
+		&newMemo.CreatedAt,
+		&newMemo.UpdatedAt,
+		&newMemo.UserID,
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get memo: %w", err)
+	}
+
+	return &newMemo, nil
+}

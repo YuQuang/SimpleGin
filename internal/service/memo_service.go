@@ -29,3 +29,12 @@ func (ms *MemoService) CreateMemo(
 
 	return memo, nil
 }
+
+func (ms *MemoService) GetMemo(id int) (*model.Memo, error) {
+	memo, err := ms.MemoRepository.GetMemo(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return memo, nil
+}

@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 
 	"github.com/royxu/simplegin/v2/internal/service"
@@ -41,6 +43,35 @@ func (mc *MemoController) CreateMemo(c *gin.Context) {
 		req.UserID,
 		req.IsPublic,
 	)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"data": memo,
+	})
+}
+
+// @Summary 取得特定的 Memo
+// @Tags Memo
+// @version 1.0
+// @Param	id		path	string	true	"Memo id"
+// @produce json
+// @Success 200
+// @Router /memos/{id} [get]
+func (mc *MemoController) GetMemo(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": "Invalid memo id",
+		})
+		return
+	}
+
+	memo, err := mc.MemoService.GetMemo(id)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"message": err.Error(),
