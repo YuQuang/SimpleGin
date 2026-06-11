@@ -22,4 +22,9 @@ func SetupRoutes(router *gin.RouterGroup, app *app.App) {
 	{
 		auth.POST("/login", app.AuthController.Login)
 	}
+
+	memos := router.Group("/memos")
+	{
+		memos.POST("", app.MemoController.CreateMemo)
+	}
 }

@@ -1,0 +1,54 @@
+package controller
+
+import (
+	"github.com/gin-gonic/gin"
+
+	"github.com/royxu/simplegin/v2/internal/service"
+)
+
+type MemoController struct {
+	MemoService *service.MemoService
+}
+type CreateMemoRequest struct {
+	Title    string `json:"title" binding:"required"`
+	Content  string `json:"content" binding:"required"`
+	UserID   int    `json:"user_id" binding:"required"`
+	IsPublic bool   `json:"is_public"`
+}
+
+// @Summary 創建一篇 Memo
+// @Tags Memo
+// @version 1.0
+// @Param	title		query	string	true	"Memo title"
+// @Param	content		query	string	true	"Memo content"
+// @Param	user_id		query	int		true	"Who is owner"
+// @Param	is_public	query	bool	true	"Is public or not"
+// @produce json
+// @Success 200
+// @Router /memos [post]
+func (mc *MemoController) CreateMemo(c *gin.Context) {
+	var req CreateMemoRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "Invalid request body",
+		})
+		return
+	}
+
+	memo, err := mc.MemoService.CreateMemo(
+		req.Title,
+		req.Content,
+		req.UserID,
+		req.IsPublic,
+	)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"data": memo,
+	})
+}

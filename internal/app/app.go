@@ -11,8 +11,9 @@ import (
 )
 
 type App struct {
-	UserController *controller.UserController
 	AuthController *controller.AuthController
+	MemoController *controller.MemoController
+	UserController *controller.UserController
 }
 
 func InitApp(config *configs.Configuration, db *sql.DB) App {
@@ -36,8 +37,17 @@ func InitApp(config *configs.Configuration, db *sql.DB) App {
 		},
 	}
 
+	memoController := &controller.MemoController{
+		MemoService: &service.MemoService{
+			MemoRepository: &repository.MemoRepository{
+				DB: db,
+			},
+		},
+	}
+
 	return App{
 		UserController: userController,
 		AuthController: authController,
+		MemoController: memoController,
 	}
 }
