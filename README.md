@@ -38,6 +38,11 @@ migrate -database postgres://<user>:<pwd>@<host>:<port>/<dbname>?sslmode=disable
 ``` bash
 migrate -database postgres://<user>:<pwd>@<host>:<port>/<dbname>?sslmode=disable -path ./migrations down
 ```
+如果需要做資料庫的更動，先開 Issue 選擇 migration 範本
+``` bash
+migrate create -dir .\migrations\ -ext sql -seq <Your_Migration_Script>
+```
+這會在 ./migrations 底下添加 up 跟 down 的腳本，接著就可以直接寫了
 
 
 ## Swagger
