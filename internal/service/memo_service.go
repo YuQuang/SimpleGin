@@ -38,3 +38,15 @@ func (ms *MemoService) GetMemo(id int) (*model.Memo, error) {
 
 	return memo, nil
 }
+
+func (ms *MemoService) GetMemos(
+	limit int,
+	offset int,
+) (*[]model.Memo, error) {
+	memos, err := ms.MemoRepository.GetMemos(limit, offset)
+	if err != nil {
+		return nil, err
+	}
+
+	return memos, nil
+}
