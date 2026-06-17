@@ -1,4 +1,5 @@
 # SimpleGin
+![cover](./.github/images/cover.png)
 1. 實作 JWT 用戶認證後端
 2. RestFul API
 3. 專案目錄管理
@@ -7,7 +8,10 @@
 6. 自動化測試
 
 
+
+
 ## Index
+- [Architecture](#Architecture)
 - [Setup PostgreSQL](#SetupPostgreSQL)
 - [Migration](#Migration)
 - [Swagger](#Swagger)
@@ -15,6 +19,11 @@
 - [Testcase](#Testcase)
 - [Reference](#Reference)
 ---
+
+
+## Architecture
+簡易架構圖
+![Architecture](./.github/images/architecture.png)
 
 
 ## SetupPostgreSQL
